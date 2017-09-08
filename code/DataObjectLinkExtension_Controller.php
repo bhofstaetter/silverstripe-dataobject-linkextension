@@ -39,29 +39,37 @@ class DataObjectLinkExtension_Controller extends DataExtension {
 
   public function show() {
     $item = $this->getItem();
+	  $access = true;
+	  $this->extend('updateShowAccess', $item, $access);
 
-    if($item) {
-      $parent = Director::get_current_page();
+	  if($item && $access) {
+		  $parent = Director::get_current_page();
 
-      $data = [
-        'Title' => $item->Title,
-        'Parent' => $parent,
-        'ClassName' => $item->ClassName,
-        'Item' => $item,
-        'Breadcrumbs' => $this->DataobjectBreadcrumbs()
-      ];
+		  $data = [
+			  'Title' => $item->Title,
+			  'Parent' => $parent,
+			  'ClassName' => $item->ClassName,
+			  'Item' => $item,
+			  'Breadcrumbs' => $this->DataobjectBreadcrumbs()
+		  ];
 
-      $pageTemplate = false;
-      if(isset($this->config['template']) && $this->config['template']) {
-        $pageTemplate = $this->config['template'];
-      }
+		  $pageTemplate = false;
+		  if(isset($this->config['template']) && $this->config['template']) {
+			  $pageTemplate = $this->config['template'];
+		  }
 
-      return $this->owner
-        ->customise($data)
-        ->renderWith([$pageTemplate, $item->ClassName . 'Page', 'Page']);
+		  $this->extend('updateShowData', $data, $item, $pageTemplate);
+
+		  return $this->owner
+			  ->customise($data)
+			  ->renderWith([$pageTemplate, $item->ClassName . 'Page', 'Page']);
     }
 
-    return $this->owner->httpError(404);
+    if($access) {
+	    return $this->owner->httpError(404);
+    } else {
+	  	return Security::permissionFailure();
+    }
   }
 
   public function DataobjectBreadcrumbs($maxDepth = 20, $unlinked = false, $stopAtPageType = false, $showHidden = false) {
