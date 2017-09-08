@@ -1,0 +1,17 @@
+{
+  "name": "extensions/silverstripe-dataobject-linkextension",
+  "authors": [
+    {
+      "name": "Benedikt Hofstaetter",
+      "email": "bh@schwarz.de"
+    }
+  ],
+  "type": "silverstripe-module",
+  "extra": {
+    "installer-name": "dataobject-linkextension"
+  },
+  "require": {
+    "php": ">=5.3.3",
+    "silverstripe/cms": "3.x@stable"
+  }
+}
