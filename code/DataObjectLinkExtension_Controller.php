@@ -30,7 +30,7 @@ class DataObjectLinkExtension_Controller extends DataExtension {
 	      }
 
         $item = $config['class']::get()->find($searchField, $url);
-				if($item->canView()) {
+				if($item && $item->canView()) {
 					return $item;
 				}
       }
