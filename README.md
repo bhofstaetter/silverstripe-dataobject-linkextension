@@ -18,10 +18,11 @@ ItemCategoryPage_Controller:
 
 ```yaml
 DataObjectLinkMapping:
-  produkt: 
-  	class: 'Item'
-  	id_instead_of_slug: false
-  	template: 'CoolItemPage'
+	mappings:
+	  produkt: 
+	    class: 'Item'
+	    id_instead_of_slug: false
+	    template: 'CoolItemPage'
 ```
 
 You need to create a mapping for each URL Action. This action needs to be unique. So in this example, you can't create another one called "produkt"
@@ -40,3 +41,5 @@ By default a template called "ClassNamePage" would be used. In this case "ItemPa
 
 If your DataObject is linked to a specific page, you could use this function to provide that page. It will be used in the Link() function. Otherwise the link would be the current page.
 
+#### 4. dev/build
+Don't forget to dev/build after adding the extension to an DataObject

@@ -86,7 +86,8 @@ class DataObjectLinkExtension extends DataExtension {
   }
 
   public function getConfiguration() {
-	  $configs = Config::inst()->get('DataObjectLinkMapping');
+	  $configs = Config::inst()->get('DataObjectLinkMapping', 'mappings');
+
 	  foreach($configs as $action => $config) {
 	  	if($config['class'] == $this->owner->ClassName) {
 	  		$match = $configs[$action];

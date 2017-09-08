@@ -18,7 +18,7 @@ class DataObjectLinkExtension_Controller extends DataExtension {
     $url = $r->allParams()['ID'];
 
     if($action && $url) {
-      $config = Config::inst()->get('DataObjectLinkMapping', $action);
+      $config = Config::inst()->get('DataObjectLinkMapping', 'mappings')[$action];
 
       if($config) {
       	$this->config = $config;
@@ -40,7 +40,7 @@ class DataObjectLinkExtension_Controller extends DataExtension {
   public function show() {
     $item = $this->getItem();
 	  $access = true;
-	  $this->extend('updateShowAccess', $item, $access);
+	  $this->owner->extend('updateShowAccess', $item, $access);
 
 	  if($item && $access) {
 		  $parent = Director::get_current_page();
@@ -58,7 +58,7 @@ class DataObjectLinkExtension_Controller extends DataExtension {
 			  $pageTemplate = $this->config['template'];
 		  }
 
-		  $this->extend('updateShowData', $data, $item, $pageTemplate);
+		  $this->owner->extend('updateShowData', $data, $item, $pageTemplate);
 
 		  return $this->owner
 			  ->customise($data)
