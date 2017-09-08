@@ -1,5 +1,5 @@
 <?php
-class DataObjectLinkExtension_Controller extends DataExtension {
+class DataObjectLinkExtension_Controller extends Extension {
 
 	private $config;
 

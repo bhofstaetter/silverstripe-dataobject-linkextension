@@ -43,3 +43,6 @@ If your DataObject is linked to a specific page, you could use this function to 
 
 #### 4. dev/build
 Don't forget to dev/build after adding the extension to an DataObject
+
+## Extending
+To use the extension points, you need to extend the class and apply your new class instead of the old one. Also your new class needs the same ``$allowed_actions`` and ``$url_handlers``
