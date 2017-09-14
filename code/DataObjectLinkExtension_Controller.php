@@ -72,8 +72,8 @@ class DataObjectLinkExtension_Controller extends Extension {
     }
   }
 
-  public function DataobjectBreadcrumbs($maxDepth = 20, $unlinked = false, $stopAtPageType = false, $showHidden = false) {
-    $pages = $this->getDataobjectBreadcrumbItems($maxDepth, $stopAtPageType, $showHidden);
+  public function DataobjectBreadcrumbs($maxDepth = 20, $unlinked = false, $stopAtPageType = false, $showHidden = false, $page = false) {
+    $pages = $this->getDataobjectBreadcrumbItems($maxDepth, $stopAtPageType, $showHidden, $page);
     $template = new SSViewer('BreadcrumbsTemplate');
     return $template->process($this->owner->customise(ArrayData::create([
       "Pages" => $pages,
@@ -81,8 +81,11 @@ class DataObjectLinkExtension_Controller extends Extension {
     ])));
   }
 
-  public function getDataobjectBreadcrumbItems($maxDepth = 20, $stopAtPageType = false, $showHidden = false) {
-    $page = $this->getItem();
+  public function getDataobjectBreadcrumbItems($maxDepth = 20, $stopAtPageType = false, $showHidden = false, $page = false) {
+  	if(!$page) {
+		  $page = $this->getItem();
+	  }
+
     $page->ShowInMenus = true;
     $page->MenuTitle = $page->Title;
     $page->Parent = $this->owner;
