@@ -45,12 +45,36 @@ class DataObjectLinkExtension_Controller extends Extension {
 	  if($item && $access) {
 		  $parent = Director::get_current_page();
 
+		  if($item->hasMethod('getBreadcrumbsMaxDepth')) {
+			  $maxDepth = $item->getBreadcrumbsMaxDepth();
+		  } else {
+			  $maxDepth = 20;
+		  }
+
+		  if($item->hasMethod('getBreadcrumbsUnlinked')) {
+			  $unlinked = $item->getBreadcrumbsUnlinked();
+		  } else {
+			  $unlinked = false;
+		  }
+
+		  if($item->hasMethod('getBreadcrumbsStopAtPageType')) {
+			  $stopAtPageType = $item->getBreadcrumbsStopAtPageType();
+		  } else {
+			  $stopAtPageType = false;
+		  }
+
+		  if($item->hasMethod('getBreadcrumbsShowHidden')) {
+			  $showHidden = $item->getBreadcrumbsShowHidden();
+		  } else {
+			  $showHidden = false;
+		  }
+
 		  $data = [
 			  'Title' => $item->Title,
 			  'Parent' => $parent,
 			  'ClassName' => $item->ClassName,
 			  'Item' => $item,
-			  'Breadcrumbs' => $this->DataobjectBreadcrumbs()
+			  'Breadcrumbs' => $this->DataobjectBreadcrumbs($maxDepth, $unlinked, $stopAtPageType, $showHidden)
 		  ];
 
 		  $pageTemplate = false;

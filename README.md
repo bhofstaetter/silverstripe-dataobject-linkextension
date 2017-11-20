@@ -41,6 +41,12 @@ By default a template called "ClassNamePage" would be used. In this case "ItemPa
 
 If your DataObject is linked to a specific page, you could use this function to provide that page. It will be used in the Link() function. Otherwise the link would be the current page.
 
+You could also use those methods to modify the breadcrumbs per class
+- getBreadcrumbsMaxDepth()
+- getBreadcrumbsUnlinked()
+- getBreadcrumbsStopAtPageType()
+- getBreadcrumbsShowHidden()
+
 #### 4. dev/build
 Don't forget to dev/build after adding the extension to an DataObject
 
