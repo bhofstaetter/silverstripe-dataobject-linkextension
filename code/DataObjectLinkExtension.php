@@ -12,7 +12,7 @@ class DataObjectLinkExtension extends DataExtension {
 
     if(
       (!$owner->URLSegment && $owner->Title) ||
-      ($owner->getConfiguration()['id_instead_of_slug'] && $owner->isChanged('Title', 2))
+      (isset($owner->getConfiguration()['id_instead_of_slug']) && $owner->getConfiguration()['id_instead_of_slug'] && $owner->isChanged('Title', 2))
     ){
       $owner->URLSegment = $owner->generateURLSegment($owner->Title);
     } else if($owner->isChanged('URLSegment', 2)) {
@@ -63,7 +63,8 @@ class DataObjectLinkExtension extends DataExtension {
       $page = Director::get_current_page();
     }
 
-	  if(!$this->owner->getConfiguration()['id_instead_of_slug']) {
+    $config = $this->owner->getConfiguration();
+    if(!isset($config['id_instead_of_slug']) || (isset($config['id_instead_of_slug']) && !$config['id_instead_of_slug'])) {
 		  $segment = $owner->URLSegment;
 	  } else {
     	$segment = $owner->ID;
