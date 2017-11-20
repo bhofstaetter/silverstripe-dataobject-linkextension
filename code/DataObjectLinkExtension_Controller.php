@@ -18,22 +18,24 @@ class DataObjectLinkExtension_Controller extends Extension {
     $url = $r->allParams()['ID'];
 
     if($action && $url) {
-      $config = Config::inst()->get('DataObjectLinkMapping', 'mappings')[$action];
+    	if(isset(Config::inst()->get('DataObjectLinkMapping', 'mappings')[$action])) {
+		    $config = Config::inst()->get('DataObjectLinkMapping', 'mappings')[$action];
 
-      if($config) {
-      	$this->config = $config;
+		    if($config) {
+			    $this->config = $config;
 
-      	if(!$config['id_instead_of_slug']) {
-		      $searchField ='URLSegment';
-	      } else {
-		      $searchField ='ID';
-	      }
+			    if(!isset($config['id_instead_of_slug']) || (isset($config['id_instead_of_slug']) && !$config['id_instead_of_slug'])) {
+				    $searchField ='URLSegment';
+			    } else {
+				    $searchField ='ID';
+			    }
 
-        $item = $config['class']::get()->find($searchField, $url);
-				if($item && $item->canView()) {
-					return $item;
-				}
-      }
+			    $item = $config['class']::get()->find($searchField, $url);
+			    if($item && $item->canView()) {
+				    return $item;
+			    }
+		    }
+	    }
     }
   }
 
