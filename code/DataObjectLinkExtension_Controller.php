@@ -18,8 +18,9 @@ class DataObjectLinkExtension_Controller extends Extension {
     $url = $r->allParams()['ID'];
 
     if($action && $url) {
-    	if(isset(Config::inst()->get('DataObjectLinkMapping', 'mappings')[$action])) {
-		    $config = Config::inst()->get('DataObjectLinkMapping', 'mappings')[$action];
+    	$config = Config::inst()->get('DataObjectLinkMapping', 'mappings');
+    	if($config && isset($config[$action])) {
+		    $config = $config[$action];
 
 		    if($config) {
 			    $this->config = $config;
