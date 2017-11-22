@@ -31,7 +31,7 @@ class DataObjectLinkExtension_Controller extends Extension {
 			    }
 
 			    $item = $config['class']::get()->find($searchField, $url);
-			    if($item && $item->canView()) {
+			    if($item) {
 				    return $item;
 			    }
 		    }
@@ -41,61 +41,62 @@ class DataObjectLinkExtension_Controller extends Extension {
 
   public function show() {
     $item = $this->getItem();
-	  $access = true;
-	  $this->owner->extend('updateShowAccess', $item, $access);
 
-	  if($item && $access) {
-		  $parent = Director::get_current_page();
+	  if($item) {
+		  $access = $item->canView();
+		  $this->owner->extend('updateShowAccess', $item, $access);
 
-		  if($item->hasMethod('getBreadcrumbsMaxDepth')) {
-			  $maxDepth = $item->getBreadcrumbsMaxDepth();
+		  if($access) {
+			  $parent = Director::get_current_page();
+
+			  if($item->hasMethod('getBreadcrumbsMaxDepth')) {
+				  $maxDepth = $item->getBreadcrumbsMaxDepth();
+			  } else {
+				  $maxDepth = 20;
+			  }
+
+			  if($item->hasMethod('getBreadcrumbsUnlinked')) {
+				  $unlinked = $item->getBreadcrumbsUnlinked();
+			  } else {
+				  $unlinked = false;
+			  }
+
+			  if($item->hasMethod('getBreadcrumbsStopAtPageType')) {
+				  $stopAtPageType = $item->getBreadcrumbsStopAtPageType();
+			  } else {
+				  $stopAtPageType = false;
+			  }
+
+			  if($item->hasMethod('getBreadcrumbsShowHidden')) {
+				  $showHidden = $item->getBreadcrumbsShowHidden();
+			  } else {
+				  $showHidden = false;
+			  }
+
+			  $data = [
+				  'Title' => $item->Title,
+				  'Parent' => $parent,
+				  'ClassName' => $item->ClassName,
+				  'Item' => $item,
+				  'Breadcrumbs' => $this->DataobjectBreadcrumbs($maxDepth, $unlinked, $stopAtPageType, $showHidden)
+			  ];
+
+			  $pageTemplate = false;
+			  if(isset($this->config['template']) && $this->config['template']) {
+				  $pageTemplate = $this->config['template'];
+			  }
+
+			  $this->owner->extend('updateShowData', $data, $item, $pageTemplate);
+
+			  return $this->owner
+				  ->customise($data)
+				  ->renderWith([$pageTemplate, $item->ClassName . 'Page', 'Page']);
 		  } else {
-			  $maxDepth = 20;
+			  return Security::permissionFailure();
 		  }
-
-		  if($item->hasMethod('getBreadcrumbsUnlinked')) {
-			  $unlinked = $item->getBreadcrumbsUnlinked();
-		  } else {
-			  $unlinked = false;
-		  }
-
-		  if($item->hasMethod('getBreadcrumbsStopAtPageType')) {
-			  $stopAtPageType = $item->getBreadcrumbsStopAtPageType();
-		  } else {
-			  $stopAtPageType = false;
-		  }
-
-		  if($item->hasMethod('getBreadcrumbsShowHidden')) {
-			  $showHidden = $item->getBreadcrumbsShowHidden();
-		  } else {
-			  $showHidden = false;
-		  }
-
-		  $data = [
-			  'Title' => $item->Title,
-			  'Parent' => $parent,
-			  'ClassName' => $item->ClassName,
-			  'Item' => $item,
-			  'Breadcrumbs' => $this->DataobjectBreadcrumbs($maxDepth, $unlinked, $stopAtPageType, $showHidden)
-		  ];
-
-		  $pageTemplate = false;
-		  if(isset($this->config['template']) && $this->config['template']) {
-			  $pageTemplate = $this->config['template'];
-		  }
-
-		  $this->owner->extend('updateShowData', $data, $item, $pageTemplate);
-
-		  return $this->owner
-			  ->customise($data)
-			  ->renderWith([$pageTemplate, $item->ClassName . 'Page', 'Page']);
     }
 
-    if($access) {
-	    return $this->owner->httpError(404);
-    } else {
-	  	return Security::permissionFailure();
-    }
+	  return $this->owner->httpError(404);
   }
 
   public function DataobjectBreadcrumbs($maxDepth = 20, $unlinked = false, $stopAtPageType = false, $showHidden = false, $page = false) {
