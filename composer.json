@@ -1,9 +1,9 @@
 {
-  "name": "extensions/silverstripe-dataobject-linkextension",
+  "name": "stripeforge/silverstripe-dataobject-linkextension",
   "authors": [
     {
       "name": "Benedikt Hofstaetter",
-      "email": "bh@schwarz.de"
+      "email": "info@stripeforge.io"
     }
   ],
   "type": "silverstripe-module",
