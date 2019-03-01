@@ -1,3 +1,5 @@
+**This module is now abandoned, for SilverStripe 4 you can use my new and improved version [silverstripe-dap](https://github.com/grasenhiller/silverstripe-dap)**
+
 # DataObject Link Extension
 Give DataObjects an own url and a page to display them on.
 
